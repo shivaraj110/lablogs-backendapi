@@ -161,7 +161,7 @@ router.get('/',(req,res)=>{
   })
 })
 
-router.post('/user',async(req,res) => {
+router.post('/api/user',async(req,res) => {
   const payload = req.body
   const fname = payload.fname
   const lname = payload.lname
@@ -174,7 +174,7 @@ router.post('/user',async(req,res) => {
       email,
       password
     })
-  if(response){
+  if(response && response.userId){
     return res.json({
     userId  : response.userId
     })
@@ -189,7 +189,7 @@ router.post('/user',async(req,res) => {
     console.log("error : " + err);
   }
 })
-router.get('/login' , async (req,res) => {
+router.get('/api/login' , async (req,res) => {
   const payload = req.body
   const email = payload.email
   const password = payload.password
@@ -213,7 +213,7 @@ router.get('/login' , async (req,res) => {
     console.log( "error : " + err);
   }
 })
-router.get('/subjects',async (req,res) => {
+router.get('/api/subjects',async (req,res) => {
   const userId = req.body.userId
   try{
     const response = await prisma.user.findMany({
@@ -244,7 +244,7 @@ router.get('/subjects',async (req,res) => {
     console.log("error " + err );
   }
 } )
-router.post('/subject', async (req,res) => {
+router.post('/api/subject', async (req,res) => {
   const name = req.body.name
   const description = req.body.description
   const userId = req.body.userId
@@ -271,7 +271,7 @@ router.post('/subject', async (req,res) => {
     
   }
 })
-router.get('/assignments', async (req,res) => {
+router.get('/api/assignments', async (req,res) => {
   const subjectId = req.body.subjectId
   try{
     const response = await prisma.assignment.findMany({
@@ -300,7 +300,7 @@ router.get('/assignments', async (req,res) => {
     console.log("error : " + err);
   }
 })
-router.post('/assignment', async (req,res) => {
+router.post('/api/assignment', async (req,res) => {
   const body = req.body
   const subjectId = body.subjectId
   const title = body.title
