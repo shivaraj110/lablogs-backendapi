@@ -174,7 +174,7 @@ router.post('/user',async(req,res) => {
       email,
       password
     })
-  if(response){
+  if(response && response.userId){
     return res.json({
     userId  : response.userId
     })
