@@ -168,12 +168,17 @@ router.post('/user',async(req,res) => {
   const email = payload.email
   const password = payload.password
   try{
-    const response = await insertUser({
-      fname,
-      lname,
-      email,
-      password
-    })
+    const response = await prisma.user.create({
+      data : {
+          fname :fname,
+          lname :lname,
+          email :email,
+          password :password,
+      },
+      select :{
+          userId : true,
+      }
+  })
   if(response && response.userId){
     return res.json({
     userId  : response.userId
