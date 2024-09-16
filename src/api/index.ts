@@ -69,8 +69,6 @@ console.log(err);
 
 }
 
-
-
 export const getUser = async (userPayload : userType) => {
   try{
     const res = await prisma.user.findUnique({
@@ -161,19 +159,24 @@ router.get('/',(req,res)=>{
   })
 })
 
-router.post('/api/user',async(req,res) => {
+router.post('/user',async(req,res) => {
   const payload = req.body
   const fname = payload.fname
   const lname = payload.lname
   const email = payload.email
   const password = payload.password
   try{
-    const response = await insertUser({
-      fname,
-      lname,
-      email,
-      password
-    })
+    const response = await prisma.user.create({
+      data : {
+          fname :fname,
+          lname :lname,
+          email :email,
+          password :password,
+      },
+      select :{
+          userId : true,
+      }
+  })
   if(response && response.userId){
     return res.json({
     userId  : response.userId
@@ -189,15 +192,20 @@ router.post('/api/user',async(req,res) => {
     console.log("error : " + err);
   }
 })
-router.get('/api/login' , async (req,res) => {
+router.get('/login' , async (req,res) => {
   const payload = req.body
   const email = payload.email
   const password = payload.password
   try{
-    const response = await getUser({
-      email,
-      password
-    })
+    const response = await prisma.user.findUnique({
+      where: {
+        email:email,
+        password:password,
+      },
+      select: {
+        userId: true,
+      },
+    });
     if(response){
      return res.json({
         userId :response.userId
@@ -213,7 +221,7 @@ router.get('/api/login' , async (req,res) => {
     console.log( "error : " + err);
   }
 })
-router.get('/api/subjects',async (req,res) => {
+router.get('/subjects',async (req,res) => {
   const userId = req.body.userId
   try{
     const response = await prisma.user.findMany({
@@ -244,7 +252,7 @@ router.get('/api/subjects',async (req,res) => {
     console.log("error " + err );
   }
 } )
-router.post('/api/subject', async (req,res) => {
+router.post('/subject', async (req,res) => {
   const name = req.body.name
   const description = req.body.description
   const userId = req.body.userId
@@ -271,7 +279,7 @@ router.post('/api/subject', async (req,res) => {
     
   }
 })
-router.get('/api/assignments', async (req,res) => {
+router.get('/assignments', async (req,res) => {
   const subjectId = req.body.subjectId
   try{
     const response = await prisma.assignment.findMany({
@@ -300,7 +308,7 @@ router.get('/api/assignments', async (req,res) => {
     console.log("error : " + err);
   }
 })
-router.post('/api/assignment', async (req,res) => {
+router.post('/assignment', async (req,res) => {
   const body = req.body
   const subjectId = body.subjectId
   const title = body.title
