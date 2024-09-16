@@ -1,9 +1,8 @@
 import emojis from './emojis';
 import express from 'express';
 const router = express.Router(); 
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
 import MessageResponse from '../interfaces/MessageResponse';
+import { prisma } from './prisma';
 router.get<{}, MessageResponse>('/', (req, res) => {
   res.json({
     message: 'API - 👋🌎🌍🌏',
@@ -153,12 +152,6 @@ console.log(err);
 console.log(err);
     }
   }
-router.get('/',(req,res)=>{
-  res.json({
-    msg : "hey"
-  })
-})
-
 router.post('/user',async(req,res) => {
   const payload = req.body
   const fname = payload.fname
