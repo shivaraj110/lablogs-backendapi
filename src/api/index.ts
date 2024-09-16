@@ -197,7 +197,7 @@ router.get('/login' , async (req,res) => {
   const email = payload.email
   const password = payload.password
   try{
-    const response = await prisma.user.findUnique({
+    const response = await prisma.user.findFirst({
       where: {
         email:email,
         password:password,
