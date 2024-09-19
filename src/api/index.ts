@@ -161,6 +161,18 @@ router.post('/user',async(req,res) => {
   const password = payload.password
   try{
     if(email !== "" && password !== ""){
+
+    const isUserExist = await prisma.user.findFirst({
+      where : {
+        email
+      },
+      select:{
+        fname : true
+      }
+    })   
+    isUserExist?.fname ? res.status(400).json({
+      msg:"user already exists!"
+    }) : null
       const response = await prisma.user.create({
         data : {
             fname :fname,
