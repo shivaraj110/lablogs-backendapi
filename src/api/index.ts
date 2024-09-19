@@ -160,27 +160,34 @@ router.post('/user',async(req,res) => {
   const email = payload.email
   const password = payload.password
   try{
-    const response = await prisma.user.create({
-      data : {
-          fname :fname,
-          lname :lname,
-          email :email,
-          password :password,
-      },
-      select :{
-          userId : true,
-      }
-  })
-  if(response && response.userId){
-    return res.json({
-    userId  : response.userId
+    if(email !== "" && password !== ""){
+      const response = await prisma.user.create({
+        data : {
+            fname :fname,
+            lname :lname,
+            email :email,
+            password :password,
+        },
+        select :{
+            userId : true,
+        }
     })
-  }
-  else{
-    return res.json({
-      msg:'something went wrong!'
-    })
-  }
+    if(response && response.userId){
+      return res.json({
+      userId  : response.userId
+      })
+    }
+    else{
+      return res.json({
+        msg:'something went wrong!'
+      })
+    }
+    }
+    else{
+      res.status(400).json({
+        msg: "invalid inputs"
+      })
+    }
   }
   catch(err){
     console.log("error : " + err);
@@ -252,7 +259,8 @@ router.post('/subject', async (req,res) => {
   const userId = req.body.userId
 
   try{
-    const response = await addSubject(
+    if(name !== "" && description !== ""){
+       const response = await addSubject(
       name,
       description,
       userId
@@ -267,6 +275,12 @@ router.post('/subject', async (req,res) => {
           msg : "something went wrong!"
         })
       }
+    }
+   else{
+    res.status(400).json({
+      msg:"invalid inputs!"
+    })
+   }
   }
   catch(err){
     console.log("error : " + err);
