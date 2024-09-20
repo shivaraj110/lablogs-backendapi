@@ -279,7 +279,7 @@ router.post('/subject', async (req,res) => {
       )
       if(response){
         return res.json({
-          userId 
+          userId : response.userId 
         })
       }
       else{
