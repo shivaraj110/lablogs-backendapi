@@ -350,4 +350,31 @@ router.post('/assignment', async (req,res) => {
   }
 })
 
+router.delete("/assignment" , async (req,res) => {
+  const assignmentId = req.body.assignmentId
+  try{
+    const result = await prisma.assignment.delete({
+      where : {
+        assignmentId : assignmentId
+      },
+      select:{
+        title : true,
+        description : true,
+        codeSnippet : true,
+      }
+    })
+    return res.json({
+      deletedAssignmentInfo : result
+    })
+  }
+catch(err){
+  console.log("error : " + err );
+  res.status(411).json({
+    msg:"invalid assignment id!"
+  })
+}
+})
+
+
+
 export default router;
