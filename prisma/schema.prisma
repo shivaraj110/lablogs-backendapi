@@ -48,3 +48,8 @@ model SubjectUser {
   subject Subject @relation(fields: [subjectId], references: [subjectId])
   user    User    @relation(fields: [userId], references: [userId])
 }
+
+model keyValue {
+  key   String  @unique
+  value Boolean
+}

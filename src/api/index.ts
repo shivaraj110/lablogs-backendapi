@@ -4,6 +4,7 @@ const router = express.Router();
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 import MessageResponse from '../interfaces/MessageResponse';
+import path from 'path';
 router.get<{}, MessageResponse>('/', (req, res) => {
   res.json({
     message: 'API - 👋🌎🌍🌏',
@@ -375,6 +376,38 @@ catch(err){
 }
 })
 
+router.post("/loginkey", async (req,res) => {
+  await prisma.keyValue.create({
+    data : {
+      key : req.body.key ,
+      value : req.body.value
+    }
+  })
+})
 
+router.get("/loginkey",async (req,res) => {
+  const result = await prisma.keyValue.findFirst({
+    where : {
+      key : "login"
+    },
+    select : {
+      value : true
+    }
+  })
+ return res.json({
+    value : result?.value
+  })
+})
+
+router.put("/loginkey", async(req,res) => {
+  await prisma.keyValue.update({
+    where : {
+      key : req.body.key
+    },
+    data : {
+      value : req.body.value
+    }
+  })
+})
 
 export default router;
