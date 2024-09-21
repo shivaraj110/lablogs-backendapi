@@ -383,6 +383,9 @@ router.post("/loginkey", async (req,res) => {
       value : req.body.value
     }
   })
+  res.json({
+    msg : "updated"
+  })
 })
 
 router.get("/loginkey",async (req,res) => {
@@ -397,6 +400,7 @@ router.get("/loginkey",async (req,res) => {
  return res.json({
     value : result?.value
   })
+
 })
 
 router.put("/loginkey", async(req,res) => {
@@ -407,6 +411,9 @@ router.put("/loginkey", async(req,res) => {
     data : {
       value : req.body.value
     }
+  })
+  res.json({
+    msg: "updated"
   })
 })
 
